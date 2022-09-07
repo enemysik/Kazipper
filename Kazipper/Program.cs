@@ -1,8 +1,16 @@
+using Kazipper.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddCors();
+builder.Services.AddDbContext<ApplicationContext>(options =>
+{
+    options.UseInMemoryDatabase("kazipper");
+});
 
 var app = builder.Build();
 
@@ -22,6 +30,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapFallbackToFile("index.html");;
-
+app.MapFallbackToFile("index.html");
+app.UseCors(policyBuilder =>
+{
+    policyBuilder.AllowAnyOrigin();
+    policyBuilder.AllowAnyMethod();
+});
 app.Run();
+
