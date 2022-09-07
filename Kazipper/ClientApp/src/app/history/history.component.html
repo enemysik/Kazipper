@@ -1,0 +1,26 @@
+<h1>History</h1>
+
+<div class="d-flex justify-content-end">
+  <button class="btn btn-primary" (click)="loadHistory()">Reload</button>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ZIP</th>
+      <th scope="col">City</th>
+      <th scope="col">Temperature</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let request of history">
+      <th>{{request.zip}}</th>
+      <th>{{request.city}}</th>
+      <th>{{request.temperature}}</th>
+      <th>{{request.date | date:'short'}}</th>
+    </tr>
+  </tbody>
+</table>
+
+
