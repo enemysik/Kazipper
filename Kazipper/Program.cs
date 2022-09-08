@@ -1,7 +1,20 @@
+using Kazipper.Configuration;
 using Kazipper.Data;
+using Kazipper.Data.Repositories;
+using Kazipper.Data.Repositories.Implementation;
+using Kazipper.Handlers;
+using Kazipper.Services;
+using Kazipper.Services.Implementation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables()
+    .Build();
+
+var settings = configuration.GetSection("AppSettings").Get<Settings>();
 
 // Add services to the container.
 
@@ -11,6 +24,10 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 {
     options.UseInMemoryDatabase("kazipper");
 });
+builder.Services.AddTransient(_=> settings);
+builder.Services.AddScoped<IWeatherRepository, WeatherRepository>();
+builder.Services.AddScoped<IWeatherService, WeatherService>();
+builder.Services.AddScoped<IOpenWeatherHelper, OpenWeatherHelper>();
 
 var app = builder.Build();
 
@@ -24,6 +41,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseMiddleware<ExceptionMiddleware>();
 
 
 app.MapControllerRoute(

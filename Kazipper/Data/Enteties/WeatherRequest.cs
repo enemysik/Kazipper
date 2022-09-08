@@ -1,4 +1,4 @@
-﻿namespace Kazipper.Data;
+﻿namespace Kazipper.Data.Enteties;
 
 public class WeatherRequest
 {
